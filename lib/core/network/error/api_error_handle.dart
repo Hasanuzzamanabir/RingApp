@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:zenzi/core/network/error/api_exception.dart';
+import 'package:orange/core/network/error/api_exception.dart';
 
 class ApiErrorHandle {
   static ApiException handleError(dynamic error) {
@@ -27,12 +27,20 @@ class ApiErrorHandle {
     if (data is String) return data;
 
     if (data is Map) {
+      if (data['detail'] != null) {
+        return data['detail'].toString();
+      }
+
       if (data['message'] != null) {
         return data['message'].toString();
       }
 
       if (data['error'] != null) {
         return data['error'].toString();
+      }
+
+      if (data['non_field_errors'] is List) {
+        return (data['non_field_errors'] as List).map((e) => e.toString()).join('\n');
       }
     }
     return 'An unexpected error occurred';

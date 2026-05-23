@@ -1,15 +1,12 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/get_core.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-
+import 'package:get/get.dart'; 
 import 'package:orange/auth/login/widgets/custom_back_buttonwidgets.dart';
+import 'package:orange/auth/otp_verify/controller/otp_controller.dart';
 import 'package:orange/auth/otp_verify/widgets/pin_input_field.dart';
-
 import 'package:orange/core/utils/constants/app_colors.dart';
 import 'package:orange/core/utils/constants/custom_text.dart';
 import 'package:orange/core/utils/constants/image_path.dart';
-
 import 'package:orange/core/widgets/custom_button_widget.dart';
 import 'package:orange/core/widgets/custom_image_background.dart';
 
@@ -21,6 +18,9 @@ class OtpVerifyScreen extends StatefulWidget {
 }
 
 class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
+  final OtpController _otpController = Get.put(OtpController());
+
+  
   @override
   Widget build(BuildContext context) {
     return BackgroundImageScaffold(
@@ -34,10 +34,8 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
               /// Top Row
               Row(
                 children: [
-                  CustomBackButtonwidget(),
-
+                  const CustomBackButtonwidget(),
                   SizedBox(width: 114.w),
-
                   Image.asset(
                     ImagePath.amoreImage,
                     width: 75.w,
@@ -58,10 +56,8 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
 
               SizedBox(height: 21.h),
 
-              /// Subtitle
               CustomText(
-                text:
-                    "We sent your one time pin to\nThis OTP will expire in 10 minutes.",
+                text: "We sent your one time pin to\n${_otpController.userEmail}\nThis OTP will expire in 10 minutes.",
                 textAlign: TextAlign.center,
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w600,
@@ -73,19 +69,24 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
               /// OTP Input
               OtpInputField(
                 onChanged: (value) {
-                  // print(value);
+                  _otpController.otpCode = value;
                 },
               ),
 
               SizedBox(height: 50.h),
 
               /// Continue Button
-              CustomButtonWidget(
-                title: "Continue",
-                onTap: () {
-                  Get.toNamed('/BottomNavBarScreen'); 
-                },
-              ),
+              Obx(() {
+                return CustomButtonWidget(
+                  title: _otpController.isLoading.value ? "Verifying..." : "Continue",
+                  onTap: _otpController.isLoading.value
+                      ? null 
+                      : () {
+                          FocusScope.of(context).unfocus();
+                          _otpController.verifyOtp();
+                        },
+                );
+              }),
 
               SizedBox(height: 18.h),
 
@@ -96,15 +97,20 @@ class _OtpVerifyScreenState extends State<OtpVerifyScreen> {
                   CustomText(
                     text: "Didn’t get the code? ",
                   ),
-
-                  CustomText(
-                    text: "Resend OTP",
-                    color: AppColors.readColor,
-                    fontWeight: FontWeight.w600,
-                    //fontSize: 14.sp,
-                    decoration: TextDecoration.underline,
-                    decorationColor: AppColors.readColor,
-                  ),
+                  Obx(() {
+                    return GestureDetector(
+                      onTap: _otpController.isResending.value
+                          ? null 
+                          : () => _otpController.resendOtp(),
+                      child: CustomText(
+                        text: _otpController.isResending.value ? "Resending..." : "Resend OTP",
+                        color: _otpController.isResending.value ? Colors.grey : AppColors.readColor,
+                        fontWeight: FontWeight.w600,
+                        decoration: TextDecoration.underline,
+                        decorationColor: AppColors.readColor,
+                      ),
+                    );
+                  }),
                 ],
               ),
 

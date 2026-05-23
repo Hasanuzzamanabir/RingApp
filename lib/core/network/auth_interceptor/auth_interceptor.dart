@@ -1,8 +1,11 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
-import 'package:zenzi/core/base_url/base_url.dart';
-import 'package:zenzi/core/token/token_storage.dart';
+import 'package:get/get_core/src/get_main.dart' as getx;
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:orange/core/base_url/base_url.dart';
+import 'package:orange/core/token/token_storage.dart';
+import 'package:orange/routes/app_routes.dart';
+
 
 class AuthInterceptor extends QueuedInterceptor {
   final Dio dio;
@@ -30,77 +33,95 @@ class AuthInterceptor extends QueuedInterceptor {
     }
     return handler.next(options);
   }
-
   @override
   Future<void> onError(
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    final request = err.requestOptions;
     final isUnauthorized = err.response?.statusCode == 401;
-    final isRefreshRequest = request.path.contains(
-      '/api/v1/accounts/token/refresh/',
-    );
-    final hasRetried = request.extra[_retryFlag] == true;
 
-    if (isUnauthorized && !isRefreshRequest && !hasRetried) {
-      final refreshed = await refreshToken();
-      if (refreshed) {
-        try {
-          final accessToken = await TokenStorage.getAccessToken();
-
-          request.extra[_retryFlag] = true;
-          request.headers['Authorization'] = 'Bearer $accessToken';
-
-          final response = await dio.fetch(request);
-          return handler.resolve(response);
-        } catch (e) {
-          return handler.next(err);
-        }
-      } else {
-        // Keep stored tokens for now; caller can decide logout flow explicitly.
-        return handler.next(err);
-      }
+    if (isUnauthorized) {
+      log('Token is expired or unauthorized. Clearing storage and redirecting to login.');
+      
+      await TokenStorage.clearTokens();
+      getx.Get.offAllNamed(AppRoute.loginScreen);
+      
+      return handler.reject(err);
     }
+
     return handler.next(err);
-  }
+  }}
 
-  Future<bool> refreshToken() async {
-    try {
-      final refreshToken = await TokenStorage.getRefreshToken();
+  // @override
+  // Future<void> onError(
+  //   DioException err,
+  //   ErrorInterceptorHandler handler,
+  // ) async {
+  //   final request = err.requestOptions;
+  //   final isUnauthorized = err.response?.statusCode == 401;
+  //   final isRefreshRequest = request.path.contains(
+  //     '/api/v1/accounts/token/refresh/',
+  //   );
+  //   final hasRetried = request.extra[_retryFlag] == true;
 
-      if (refreshToken == null || refreshToken.isEmpty) {
-        return false;
-      }
+  //   if (isUnauthorized && !isRefreshRequest && !hasRetried) {
+  //     // final refreshed = await refreshToken();
+  //     // if (refreshed) {
+  //     try {
+  //       final accessToken = await TokenStorage.getAccessToken();
 
-      final response = await dio.post(
-        '${BaseUrl.baseUrl}/api/v1/accounts/token/refresh/',
-        data: {'refresh': refreshToken},
-      );
+  //        // request.extra[_retryFlag] = true;
+  //         request.headers['Authorization'] = 'Bearer $accessToken';
 
-      final body = response.data;
-      final data = body is Map<String, dynamic>
-          ? (body['data'] is Map<String, dynamic>
-                ? body['data'] as Map<String, dynamic>
-                : body)
-          : <String, dynamic>{};
+  //         final response = await dio.fetch(request);
+  //         return handler.resolve(response);
+  //       } catch (e) {
+  //         return handler.next(err);
+  //       }
+  //     } else {
+  //       // Keep stored tokens for now; caller can decide logout flow explicitly.
+  //       return handler.next(err);
+  //     }
+  //   }
+  //   return handler.next(err);
+  // }
 
-      final newAccessToken = data['access']?.toString();
-      final newRefreshToken = data['refresh']?.toString();
+  // Future<bool> refreshToken() async {
+  //   try {
+  //     final refreshToken = await TokenStorage.getRefreshToken();
 
-      if (newAccessToken == null || newAccessToken.isEmpty) {
-        return false;
-      }
+  //     if (refreshToken == null || refreshToken.isEmpty) {
+  //       return false;
+  //     }
 
-      await TokenStorage.saveAccessToken(newAccessToken);
+  //     final response = await dio.post(
+  //       '${BaseUrl.baseUrl}/api/v1/accounts/token/refresh/',
+  //       data: {'refresh': refreshToken},
+  //     );
 
-      if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
-        await TokenStorage.saveRefreshToken(newRefreshToken);
-      }
+  //     final body = response.data;
+  //     final data = body is Map<String, dynamic>
+  //         ? (body['data'] is Map<String, dynamic>
+  //               ? body['data'] as Map<String, dynamic>
+  //               : body)
+  //         : <String, dynamic>{};
 
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-}
+  //     final newAccessToken = data['access']?.toString();
+  //     final newRefreshToken = data['refresh']?.toString();
+
+  //     if (newAccessToken == null || newAccessToken.isEmpty) {
+  //       return false;
+  //     }
+
+  //     await TokenStorage.saveAccessToken(newAccessToken);
+
+  //     if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
+  //       await TokenStorage.saveRefreshToken(newRefreshToken);
+  //     }
+
+  //     return true;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
+

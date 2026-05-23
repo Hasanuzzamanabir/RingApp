@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:orange/core/utils/image_path.dart';
+import 'package:orange/core/utils/constants/image_path.dart';
 
 /// A reusable Scaffold with a full-screen background image
 class BackgroundImageScaffold extends StatelessWidget {

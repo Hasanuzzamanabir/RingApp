@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:orange/core/utils/image_path.dart';
+import 'package:orange/core/utils/constants/image_path.dart';
 import 'package:orange/routes/app_routes.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 

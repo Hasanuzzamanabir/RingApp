@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:zenzi/core/network/dio_client/dio_client.dart';
-import 'package:zenzi/core/network/error/api_error_handle.dart';
+import 'package:orange/core/network/dio_client/dio_client.dart';
+import 'package:orange/core/network/error/api_error_handle.dart';
 
 class ApiServices {
   Dio dio(bool requireAuth) {

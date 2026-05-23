@@ -8,7 +8,7 @@ import 'package:orange/on_boarding/view/on_boardin_screen.dart';
 import 'package:orange/profile_section/manage_account/manage_account/view/manage_account_screen.dart';
 import 'package:orange/profile_section/manage_account/privacy_policy/view/peivecy_policy_screen.dart';
 import 'package:orange/profile_section/manage_account/term_and_condition/view/terms_and_condition_screen.dart';
-import 'package:orange/profile_section/manage_account/update_profile/view/update_profile_screen.dart';
+import 'package:orange/profile_section/manage_account/update_profile/view/update_profile_screen.dart' hide ManageAccountScreen;
 import 'package:orange/profile_section/profile/view/profile_screen.dart';
 import 'package:orange/profile_section/ring_exchange/free_ring_exchange/view/free_ring_exchane_screen.dart';
 import 'package:orange/profile_section/ring_exchange/ring_exchange/view/ring_exchange_screen.dart';
