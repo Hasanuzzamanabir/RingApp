@@ -1,5 +1,6 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:orange/auth/login/View/login_screen.dart';
+import 'package:orange/auth/login/View/request_account_view.dart';
 import 'package:orange/auth/otp_verify/view/otp_verify_screen.dart';
 import 'package:orange/bottom_nav_bar/view/bottom_nav_bar_screen.dart';
 import 'package:orange/messege_section/chat/view/chat_screen.dart';
@@ -29,6 +30,7 @@ class AppRoute {
   static const String loginScreen = '/loginScreen';
   static const String otpverifyScreen = '/otpverifyScreen';
   static const String bottomNavBarScreen = '/BottomNavBarScreen';
+  static const String requestAccountScreen = '/requestAccountScreen';
   //profile
   static const String profileScreen = '/profileScreen';
   static const String manageAccountScreen = '/manageAccountScreen';
@@ -55,6 +57,7 @@ class AppRoute {
   static String getSplashScreen() => splashScreen;
   static String getOnBoardingScreen() => onBoardingScreen;
   static String getLoginScreen() => loginScreen;
+  static String getRequestAccountScreen() => requestAccountScreen;
   static String getOtpverificationScreen() => otpverifyScreen;
     static String getBottomNavBarScreen() => bottomNavBarScreen;
     static String getManageAccountScreen() => manageAccountScreen;
@@ -80,6 +83,7 @@ class AppRoute {
     GetPage(name: onBoardingScreen, page: () => OnBoardingScreen()),
     GetPage(name: loginScreen, page: () => LoginScreen()),
     GetPage(name: otpverifyScreen, page: () => OtpVerifyScreen()),
+    GetPage(name: requestAccountScreen, page: () => RequestAccountScreen()),
     GetPage(name: bottomNavBarScreen, page: () => BottomNavBarScreen()),
     GetPage(name: profileScreen, page: () => const ProfileScreen()),
     GetPage(name: manageAccountScreen, page: () => ManageAccountScreen()),

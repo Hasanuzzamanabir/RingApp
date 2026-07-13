@@ -1,3 +1,4 @@
 class BaseUrl {
-  static const String baseUrl = 'http://103.186.20.235:8005';
+  static const String baseUrl = 'https://clashingly-nonlicensable-tennille.ngrok-free.dev';
+  static const String webSocketUrl = 'wss://clashingly-nonlicensable-tennille.ngrok-free.dev/ws/chat';
 }

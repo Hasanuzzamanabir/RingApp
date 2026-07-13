@@ -142,7 +142,7 @@ class SpecialEventScreen extends StatelessWidget {
               }),
               SizedBox(height: 15.h),
               Align(
-                alignment: Alignment.topRight,
+                alignment: Alignment.center,
                 child: TextButton(
                   onPressed: () => controller.launchVideoUrl(),
                   child: Text(

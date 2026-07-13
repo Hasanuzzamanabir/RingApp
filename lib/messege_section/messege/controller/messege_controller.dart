@@ -1,32 +1,43 @@
+import 'dart:developer';
 import 'package:get/get.dart';
+import 'package:orange/core/network/services/api_services.dart';
 import 'package:orange/messege_section/messege/model/messege_model.dart';
 
 class MessegeController extends GetxController {
- 
-  final List<MessegeModel> _allMessages = [
-    MessegeModel(
-        userName: 'User 123',
-        lastMessage: 'Start Conversation via QR Scan',
-        time: 'Now',
-        isOnline: true),
-    MessegeModel(
-        userName: 'User 456',
-        lastMessage: 'Start Conversation via QR Scan',
-        time: '8.00 pm'),
-    MessegeModel(
-        userName: 'User 789',
-        lastMessage: 'Start Conversation via QR Scan',
-        time: 'Now'),
-  ];
+  final ApiServices _apiServices = ApiServices();
 
+  final RxList<MessegeModel> _allMessages = <MessegeModel>[].obs;
   var messages = <MessegeModel>[].obs;
-  
+  var isLoading = false.obs;
   var selectedOption = ''.obs;
+
+  static const String _conversationsEndpoint = '/api/chat/conversations/';
 
   @override
   void onInit() {
     super.onInit();
-    messages.assignAll(_allMessages);
+    fetchConversations();
+  }
+
+  Future<void> fetchConversations() async {
+    try {
+      isLoading.value = true;
+      final response = await _apiServices.get(
+        _conversationsEndpoint,
+        requireAuth: true,
+      );
+
+      if (response.statusCode == 200) {
+        final List data = response.data ?? [];
+        final parsedList = data.map((e) => MessegeModel.fromJson(e)).toList();
+        _allMessages.assignAll(parsedList);
+        messages.assignAll(parsedList);
+      }
+    } catch (e) {
+      log("Error fetching conversations: $e");
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   void searchMessages(String query) {
@@ -34,8 +45,12 @@ class MessegeController extends GetxController {
       messages.assignAll(_allMessages);
     } else {
       messages.assignAll(
-        _allMessages.where((msg) =>
-            msg.userName.toLowerCase().contains(query.toLowerCase())).toList()
+        _allMessages.where((msg) {
+          final targetName = msg.participants.isNotEmpty 
+              ? msg.participants[0].name.toLowerCase() 
+              : '';
+          return targetName.contains(query.toLowerCase());
+        }).toList()
       );
     }
   }
