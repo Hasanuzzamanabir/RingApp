@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:get/get_core/src/get_main.dart' as getx;
 import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:orange/core/base_url/base_url.dart';
 import 'package:orange/core/token/token_storage.dart';
 import 'package:orange/routes/app_routes.dart';
 
