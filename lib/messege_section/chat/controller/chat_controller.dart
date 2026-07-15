@@ -64,6 +64,7 @@ import 'package:get/get.dart';
 import 'package:orange/core/base_url/base_url.dart';
 import 'package:orange/core/network/services/api_services.dart';
 import 'package:orange/messege_section/chat/model/chat_messege_model.dart';
+import 'package:orange/messege_section/messege/controller/messege_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -151,6 +152,9 @@ class ChatController extends GetxController {
       _channel?.sink.add(jsonEncode(sendData));
       textController.clear();
     }
+    if (Get.isRegistered<MessegeController>()) {
+        Get.find<MessegeController>().fetchCreditBalance();
+      }
   }
 
   @override

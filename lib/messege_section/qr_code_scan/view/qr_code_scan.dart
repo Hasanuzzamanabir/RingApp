@@ -13,7 +13,6 @@ class QRScannerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // কন্ট্রোলার ইনজেকশন
     final controller = Get.put(QRScannerController());
 
     return BackgroundImageScaffold(

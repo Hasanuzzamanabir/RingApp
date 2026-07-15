@@ -197,6 +197,7 @@ import 'package:get/get.dart';
 import 'package:orange/auth/login/widgets/custom_back_buttonwidgets.dart';
 import 'package:orange/core/widgets/custom_image_background.dart';
 import 'package:orange/messege_section/widgets/limited_credit_widget.dart';
+import 'package:orange/messege_section/messege/controller/messege_controller.dart';
 import '../../../../core/utils/constants/icon_path.dart';
 import '../controller/chat_controller.dart';
 
@@ -206,6 +207,7 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ChatController chatController = Get.put(ChatController());
+    final MessegeController messegeController = Get.find<MessegeController>();
 
     final dynamic args = Get.arguments;
     final String name = args?['name'] ?? 'User';
@@ -251,14 +253,14 @@ class ChatScreen extends StatelessWidget {
                             children: [
                               Image.asset(IconPath.cuponIcon, height: 20.h, width: 20.w),
                               SizedBox(width: 10.w),
-                              Text(
-                                "20",
+                              Obx(() => Text(
+                                "${messegeController.creditBalance.value}",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
-                              ),
+                              )),
                             ],
                           ),
                         ),
