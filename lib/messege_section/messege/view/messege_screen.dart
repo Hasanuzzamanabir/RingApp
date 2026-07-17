@@ -685,21 +685,20 @@ class MessegeScreen extends StatelessWidget {
                       );
                     }
 
-                    return ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      itemCount: controller.messages.length,
-                      itemBuilder: (context, index) {
-                        final msg = controller.messages[index];
-                        
-                        final targetUser = msg.participants.firstWhereOrNull(
-                          (p) => p.id.toString().trim() != currentUserId.trim() && 
-                                 p.name.toLowerCase() != "abir hasan",
-                        ) ?? (msg.participants.isNotEmpty ? msg.participants[0] : null);
-                        
-                        log("DEBUG: My ID: $currentUserId | Target User: ${targetUser?.name}");
+                  return ListView.builder(
+  padding: EdgeInsets.symmetric(horizontal: 16.w),
+  itemCount: controller.messages.length,
+  itemBuilder: (context, index) {
+    final msg = controller.messages[index];
+    
+    final targetUser = msg.participants.firstWhereOrNull(
+      (p) => p.id.toString().trim() != currentUserId.trim(),
+    ) ?? (msg.participants.isNotEmpty ? msg.participants[0] : null);
+    
+    log("DEBUG: My ID: $currentUserId | Target User: ${targetUser?.name}");
 
-                        final displayName = targetUser?.name ?? 'Unknown';
-                        final displayId = targetUser?.id.toString() ?? '0';
+    final displayName = targetUser?.name ?? 'Unknown';
+    final displayId = targetUser?.id.toString() ?? '0';
 
                         String formattedTime = msg.createdAt;
                         if (formattedTime.contains('T')) {
@@ -787,24 +786,47 @@ class MessegeScreen extends StatelessWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
+                              // trailing: Column(
+                              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              //   crossAxisAlignment: CrossAxisAlignment.end,
+                              //   children: [
+                              //     PopupMenuButton<String>(
+                              //       color: Colors.red.shade300,
+                              //       onSelected: controller.updateSelection,
+                              //       itemBuilder: (context) => ['Block', 'Unblock']
+                              //           .map((choice) => PopupMenuItem(value: choice, child: Text(choice)))
+                              //           .toList(),
+                              //       child: const Icon(Icons.more_vert, size: 20),
+                              //     ),
+                              //     Text(
+                              //       formattedTime,
+                              //       style: const TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w500),
+                              //     ),
+                              //   ],
+                              // ),
                               trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  PopupMenuButton<String>(
-                                    color: Colors.red.shade300,
-                                    onSelected: controller.updateSelection,
-                                    itemBuilder: (context) => ['Block', 'Unblock']
-                                        .map((choice) => PopupMenuItem(value: choice, child: Text(choice)))
-                                        .toList(),
-                                    child: const Icon(Icons.more_vert, size: 20),
-                                  ),
-                                  Text(
-                                    formattedTime,
-                                    style: const TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  crossAxisAlignment: CrossAxisAlignment.end,
+  children: [
+    PopupMenuButton<String>(
+      color: Colors.red.shade300,
+      onSelected: (choice) {
+        controller.toggleBlockUser(choice, displayId);
+      },
+      itemBuilder: (context) => ['Block', 'Unblock']
+          .map((choice) => PopupMenuItem(
+                value: choice, 
+                child: Text(choice, style: const TextStyle(color: Colors.white)),
+              ))
+          .toList(),
+      child: const Icon(Icons.more_vert, size: 20),
+    ),
+    Text(
+      formattedTime,
+      style: const TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w500),
+    ),
+  ],
+),
                             ),
                           ),
                         );
@@ -817,16 +839,27 @@ class MessegeScreen extends StatelessWidget {
           ],
         ),
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.red.shade300,
+      //   onPressed: () async {
+      //     final qrText = await Get.to(() => const QRScannerScreen());
+      //     if (qrText != null) {
+      //       debugPrint("QR CODE RESULT: $qrText");
+      //     }
+      //   },
+      //   child: const Icon(Icons.add, color: Colors.white),
+      // ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red.shade300,
-        onPressed: () async {
-          final qrText = await Get.to(() => const QRScannerScreen());
-          if (qrText != null) {
-            debugPrint("QR CODE RESULT: $qrText");
-          }
-        },
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
+  backgroundColor: Colors.red.shade300,
+  onPressed: () async {
+    final qrText = await Get.to(() => const QRScannerScreen());
+    if (qrText != null && qrText.toString().trim().isNotEmpty) {
+      log("QR CODE RESULT: $qrText");
+      await controller.scanAndConnectUser(qrText.toString().trim());
+    }
+  },
+  child: const Icon(Icons.add, color: Colors.white),
+),
     );
   }
 }

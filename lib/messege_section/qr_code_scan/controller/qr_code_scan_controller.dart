@@ -41,4 +41,5 @@ class QRScannerController extends GetxController with GetSingleTickerProviderSta
     mobileController.dispose();
     super.onClose();
   }
+  
 }

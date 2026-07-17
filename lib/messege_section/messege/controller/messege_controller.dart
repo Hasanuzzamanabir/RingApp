@@ -138,6 +138,33 @@ class MessegeController extends GetxController {
       log("Error fetching credit balance: $e");
     }
   }
+  Future<void> toggleBlockUser(String action, String userId) async {
+  try {
+    isLoading.value = true;
+    final String url = '/api/chat/users/$userId/block/';
+    dynamic response;
+
+    if (action == 'Block') {
+      response = await _apiServices.post(url, data: {}, requireAuth: true);
+    } else if (action == 'Unblock') {
+      response = await _apiServices.delete(url, requireAuth: true);
+    }
+
+    if (response != null && (response.statusCode == 201 || response.statusCode == 204)) {
+      Get.snackbar(
+        "Success", 
+        "User ${action == 'Block' ? 'blocked' : 'unblocked'} successfully.",
+        snackPosition: SnackPosition.BOTTOM
+      );
+      fetchConversations();
+    }
+  } catch (e) {
+    log("Error processing $action: $e");
+    Get.snackbar("Error", "Failed to $action user.", snackPosition: SnackPosition.BOTTOM);
+  } finally {
+    isLoading.value = false;
+  }
+}
 
   void searchMessages(String query) {
     if (query.trim().isEmpty) {
@@ -153,6 +180,30 @@ class MessegeController extends GetxController {
       );
     }
   }
+  Future<void> scanAndConnectUser(String qrSlug) async {
+  try {
+    isLoading.value = true;
+    final response = await _apiServices.post(
+      '/api/chat/scan/$qrSlug/',
+      data: {},
+      requireAuth: true,
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Get.snackbar(
+        "Success", 
+        "Connected successfully!",
+        snackPosition: SnackPosition.BOTTOM
+      );
+      fetchConversations();
+    }
+  } catch (e) {
+    log("Error scanning QR code: $e");
+    Get.snackbar("Error", "Failed to connect via QR code.", snackPosition: SnackPosition.BOTTOM);
+  } finally {
+    isLoading.value = false;
+  }
+}
 
   void updateSelection(String option) {
     selectedOption.value = option;

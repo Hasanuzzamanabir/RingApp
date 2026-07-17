@@ -1305,34 +1305,34 @@ Widget _accountInformation(BuildContext context) {
           ],
         ),
       ),
-      _itemTile(
-        label: "Password",
-        iconPath: IconPath.passwordIcon,
-        subtitle: "****************",
-        trailing: Image.asset(
-          IconPath.editIcon,
-          height: 20.h,
-          width: 20.w,
-        ),
-        onTap: () {
-          Get.dialog(
-            UpdatePasswordDialog(),
-            barrierDismissible: false,
-          );
-        },
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 18.w),
-        child: Column(
-          children: [
-            Container(
-              height: 2.h,
-              color: const Color(0xffE3E0E0),
-            ),
-            SizedBox(height: 2.h),
-          ],
-        ),
-      ),
+      // _itemTile(
+      //   label: "Password",
+      //   iconPath: IconPath.passwordIcon,
+      //   subtitle: "****************",
+      //   trailing: Image.asset(
+      //     IconPath.editIcon,
+      //     height: 20.h,
+      //     width: 20.w,
+      //   ),
+      //   onTap: () {
+      //     Get.dialog(
+      //       UpdatePasswordDialog(),
+      //       barrierDismissible: false,
+      //     );
+      //   },
+      // ),
+      // Padding(
+      //   padding: EdgeInsets.symmetric(horizontal: 18.w),
+      //   child: Column(
+      //     children: [
+      //       Container(
+      //         height: 2.h,
+      //         color: const Color(0xffE3E0E0),
+      //       ),
+      //       SizedBox(height: 2.h),
+      //     ],
+      //   ),
+      // ),
       _itemTile(
         label: "Terms & Conditions",
         iconPath: IconPath.privacyPolicyIcon,
