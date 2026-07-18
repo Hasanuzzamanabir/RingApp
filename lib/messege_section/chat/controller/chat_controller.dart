@@ -183,7 +183,7 @@ class ChatController extends GetxController {
   var isLoading = false.obs;
   
   String conversationId = '';
-  final int currentUserId = 1;
+  var currentUserId = ''.obs; 
   WebSocketChannel? _channel;
   
   bool _isDisposed = false;
@@ -192,11 +192,32 @@ class ChatController extends GetxController {
   void onInit() {
     super.onInit();
     final dynamic args = Get.arguments;
-    conversationId = args?['conversationId'] ?? '';
+    conversationId = args?['conversationId']?.toString() ?? '';
     
     if (conversationId.isNotEmpty) {
-      fetchChatHistory();
-      _connectWebSocket();
+      _loadCurrentUserId().then((_) {
+        fetchChatHistory();
+        _connectWebSocket();
+      });
+    }
+  }
+
+  Future<void> _loadCurrentUserId() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final String token = prefs.getString('access_token') ?? prefs.getString('token') ?? prefs.getString('access') ?? '';
+      
+      if (token.isNotEmpty && token.contains('.')) {
+        final parts = token.split('.');
+        if (parts.length == 3) {
+          final payload = utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+          final Map<String, dynamic> data = jsonDecode(payload);
+          currentUserId.value = data['user_id']?.toString() ?? '';
+          log("Chat DEBUG: Loaded Current User ID -> '${currentUserId.value}'");
+        }
+      }
+    } catch (e) {
+      log("Error loading user id in ChatController: $e");
     }
   }
 
@@ -224,8 +245,12 @@ class ChatController extends GetxController {
     if (_isDisposed) return; 
 
     try {
+      try {
+        _channel?.sink.close();
+      } catch (_) {}
+
       final prefs = await SharedPreferences.getInstance();
-      final String token = prefs.getString('access') ?? prefs.getString('access_token') ?? '';
+      final String token = prefs.getString('access_token') ?? prefs.getString('token') ?? prefs.getString('access') ?? '';
       
       final String wsUrl = '${BaseUrl.webSocketUrl}/$conversationId/?token=$token';
       log("WebSocket Connecting to: $wsUrl");
@@ -277,7 +302,6 @@ class ChatController extends GetxController {
       try {
         _channel?.sink.add(jsonEncode(sendData));
         textController.clear();
-        
         _triggerMessegeListRefresh();
       } catch (e) {
         log("Failed to send message over WebSocket: $e");

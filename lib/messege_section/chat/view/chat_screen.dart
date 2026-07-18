@@ -200,6 +200,7 @@ import 'package:orange/messege_section/widgets/limited_credit_widget.dart';
 import 'package:orange/messege_section/messege/controller/messege_controller.dart';
 import '../../../../core/utils/constants/icon_path.dart';
 import '../controller/chat_controller.dart';
+import 'dart:developer';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -316,12 +317,22 @@ class ChatScreen extends StatelessWidget {
                   itemCount: chatController.messages.length,
                   itemBuilder: (context, index) {
                     final message = chatController.messages[index];
-                    bool isCurrentUser = message.senderId == chatController.currentUserId;
+                    
+                // এখানে ডাইনামিক রিয়েল টোকেন আইডির সাথে ম্যাচিং ফিক্স করা হয়েছে
+bool isCurrentUser = message.senderId.toString().trim() == chatController.currentUserId.value.trim();
 
-                    String formattedTime = message.createdAt;
-                    if (formattedTime.contains('T')) {
-                      formattedTime = formattedTime.split('T')[1].substring(0, 5);
-                    }
+String formattedTime = '--:--';
+try {
+  if (message.createdAt.isNotEmpty) {
+    DateTime parsedDate = DateTime.parse(message.createdAt).toLocal();
+    int hour = parsedDate.hour > 12 ? parsedDate.hour - 12 : (parsedDate.hour == 0 ? 12 : parsedDate.hour);
+    String minute = parsedDate.minute.toString().padLeft(2, '0');
+    String period = parsedDate.hour >= 12 ? 'PM' : 'AM';
+    formattedTime = "$hour:$minute $period";
+  }
+} catch (e) {
+  log("Time parsing error in ChatScreen: $e");
+}
 
                     return Align(
                       alignment: isCurrentUser ? Alignment.centerRight : Alignment.centerLeft,
