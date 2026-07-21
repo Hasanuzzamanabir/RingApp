@@ -29,7 +29,7 @@ class BottomNavBarScreen extends StatelessWidget {
       body: Obx(() => pages[controller.currentIndex.value]),
       
       bottomNavigationBar: Container(
-        height: 100.h,
+        height: 110.h,
         decoration: const BoxDecoration(
           color: Colors.black,
         ),
