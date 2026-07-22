@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import 'package:orange/core/utils/constants/image_path.dart';
 import 'package:orange/scanner_section/qr_code_ambassidor/controller/share_view_controller.dart';
 
@@ -10,7 +9,6 @@ class ShareLinkDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Find the existing controller
     final controller = Get.find<LinkController>();
 
     return AlertDialog(
@@ -24,7 +22,7 @@ class ShareLinkDialog extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
-                onTap: () => Get.back(), // GetX version of Navigator.pop
+                onTap: () => Get.back(),
                 child: Row(
                   children: [
                     const Icon(Icons.arrow_back_ios_new, size: 15),
@@ -65,12 +63,18 @@ class ShareLinkDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: const Color(0xff84B3FF), width: 1),
                   ),
-                  child: Obx(() => Text(
-                        controller.generatedLink.value,
-                        style: const TextStyle(fontSize: 14),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      )),
+                  child: Obx(() {
+                    final link = controller.generatedLink.value;
+                    return Text(
+                      link.isNotEmpty ? link : "Pending approval/video completion",
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        color: link.isNotEmpty ? Colors.black : Colors.grey,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    );
+                  }),
                 ),
               ),
               SizedBox(width: 5.w),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:orange/core/utils/constants/icon_path.dart';
 import 'package:orange/core/utils/constants/image_path.dart';
 import 'package:orange/profile_section/profile/controller/profile_screen_controller.dart';
 
@@ -64,7 +65,7 @@ Widget profileAvatar(
     return CircleAvatar(
       radius: radius,
       backgroundImage:
-          const AssetImage(ImagePath.profileImage),
+          const AssetImage(IconPath.profileIcon),
     );
   });
 }
