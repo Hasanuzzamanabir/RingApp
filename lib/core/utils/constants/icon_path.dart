@@ -6,7 +6,7 @@ class IconPath{
   static const  String backArrowIcon ='$_basePath/back_arrow_icon.png';
   static const  String manageAccountIcon ='$_basePath/manage_account_icon_1.png';
   static const  String memberIcon ='$_basePath/member_icon.png';
-  static const  String profileIcon ='$_basePath/profile_icon.png';
+ static const  String profileIcon ='$_basePath/profile_icon.png';
   static const  String ringIcon ='$_basePath/ring_icon.png';
   static const  String refundIcon ='$_basePath/refund_icon.png';
   static const  String supportIcon ='$_basePath/support_icon.png';

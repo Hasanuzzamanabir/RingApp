@@ -46,13 +46,13 @@ class SupportScreen extends StatelessWidget {
                   SizedBox(height: 30.h),
                   
                   const Text(
-                    "We aim to have a healthy and engaged community. Send us a message so that we can resolve any issue or answer any question you may have",
+                    "We aim to have a health and engaged community.  Send us a message so 	that we can resolve or answer any question you may have.",
                     style: TextStyle(color: Color(0xffB2A9AA)),
                   ),
                   SizedBox(height: 36.h),
                   
                   CustomTextField(
-                    hintText: "Full Name",
+                    hintText: "First Name",
                     onChanged: controller.updateName,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {

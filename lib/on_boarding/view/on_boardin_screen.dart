@@ -25,13 +25,13 @@ class OnBoardingScreen extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height: 310.h,
+                  height: 270.h,
                 ),
 
                 SvgPicture.asset(
                   ImagePath.onBoardingImage,
                   fit: BoxFit.cover,
-                  height: 330.h,
+                  height: 320.h,
                 ),
               ],
             ),
@@ -46,7 +46,7 @@ class OnBoardingScreen extends StatelessWidget {
                 const CustomAppLogoSvgImage(),
 
                 SizedBox(
-                  height: 320.h,
+                  height: 370.h,
                 ),
 
                 CustomButtonWidget(
@@ -59,7 +59,7 @@ class OnBoardingScreen extends StatelessWidget {
                 ),
 
                 SizedBox(
-                  height: 130.h,
+                  height: 110.h,
                 ),
               ],
             ),

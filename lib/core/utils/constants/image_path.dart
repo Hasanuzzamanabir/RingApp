@@ -13,6 +13,7 @@ class ImagePath{
   static const  String splashBackgroundImage ='$_basePath/splash_back_ground_image.png';
   static const  String allScreenBackgroundImage ='$_basePath/all_screen_back_ground_image.png';
   static const  String onBoardingImage ='$_basePath/on_boarding_image.svg';
+  static const  String onBoardingImage2 ='$_basePath/on_boarding_image2.svg';
 
 
 

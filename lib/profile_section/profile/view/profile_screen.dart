@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:orange/core/utils/constants/custom_text.dart';
 import 'package:orange/core/utils/constants/icon_path.dart';
 import 'package:orange/profile_section/member_status/view/member_status_screen.dart';
+import 'package:orange/profile_section/profile/controller/log_out_screen_controller.dart';
 import 'package:orange/profile_section/profile/controller/profile_screen_controller.dart';
 import 'package:orange/profile_section/profile_avatar_widget.dart';
 import 'package:orange/profile_section/refund/view/refund_screen.dart';
@@ -17,7 +18,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProfileController(), permanent: true);
+    final controller = Get.put(ProfileController());
 
     return Scaffold(
       body: Column(
@@ -124,14 +125,15 @@ class ProfileScreen extends StatelessWidget {
                       },
                     ),
 
-                    _buildMenuItem(
-                      IconPath.memberIcon,
-                      "Log Out",
-                      onTap: () {
-                        controller.logout();
-                      },
-                      showArrow: false,
-                    ),
+                 _buildMenuItem(
+  IconPath.memberIcon, 
+  "Log Out",
+  onTap: () {
+    final logoutController = Get.put(LogoutController());
+    logoutController.logout();
+  },
+  showArrow: false,
+),
                   ],
                 ),
               ),

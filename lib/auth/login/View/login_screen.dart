@@ -224,7 +224,7 @@ class LoginScreenState extends State<LoginScreen> {
                   SizedBox(height: 30.h), 
 
                   // ================= NEW ACCOUNT REQUEST CONTAINER =================
-                  _buildAccountRequestContainer(),
+                // _buildAccountRequestContainer(),
 
                   SizedBox(height: 50.h),
                 ],
@@ -236,42 +236,42 @@ class LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildAccountRequestContainer() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-      decoration: BoxDecoration(
-        color: const Color(0xFF7E6000), 
-        borderRadius: BorderRadius.circular(16.r), 
-      ),
-      child: RichText(
-        text: TextSpan(
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: const Color(0xFFECECEC), 
-            height: 1.4,
-          ),
-          children: [
-            const TextSpan(
-              text: "Could not find your account. Bought a ring? ",
-            ),
-            TextSpan(
-              text: "Request for an account",
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                decoration: TextDecoration.underline, 
-              ),
-              recognizer: TapGestureRecognizer()
-                .. onTap = () {
+  // Widget _buildAccountRequestContainer() {
+  //   return Container(
+  //     width: double.infinity,
+  //     padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+  //     decoration: BoxDecoration(
+  //       color: const Color(0xFF7E6000), 
+  //       borderRadius: BorderRadius.circular(16.r), 
+  //     ),
+  //     child: RichText(
+  //       text: TextSpan(
+  //         style: TextStyle(
+  //           fontSize: 14.sp,
+  //           color: const Color(0xFFECECEC), 
+  //           height: 1.4,
+  //         ),
+  //         children: [
+  //           const TextSpan(
+  //             text: "Could not find your account. Bought a ring? ",
+  //           ),
+  //           TextSpan(
+  //             text: "Request for an account",
+  //             style: const TextStyle(
+  //               fontWeight: FontWeight.bold,
+  //               color: Colors.white,
+  //               decoration: TextDecoration.underline, 
+  //             ),
+  //             recognizer: TapGestureRecognizer()
+  //               .. onTap = () {
                 
-                  Get.toNamed(AppRoute.getRequestAccountScreen());
-                  debugPrint("Request for account clicked");
-                },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  //                 Get.toNamed(AppRoute.getRequestAccountScreen());
+  //                 debugPrint("Request for account clicked");
+  //               },
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 }

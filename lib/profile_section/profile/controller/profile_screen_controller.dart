@@ -63,10 +63,7 @@ class ProfileController extends GetxController {
       isProfileLoading.value = false;
     }
   }
-
-  // ================= UPDATE PROFILE =================
-
-  Future<void> updateProfile(String newName) async {
+Future<void> updateProfile(String newName) async {
     if (newName.trim().isEmpty) {
       Get.snackbar("Required", "Name cannot be empty");
       return;
@@ -79,7 +76,6 @@ class ProfileController extends GetxController {
         "name": newName.trim(),
       };
 
-      // ================= IMAGE UPLOAD =================
       if (profileImage.value != null) {
         log("Selected Image Path => ${profileImage.value!.path}");
 
@@ -123,9 +119,14 @@ class ProfileController extends GetxController {
     }
   }
 
+  RxBool isPickingImage = false.obs;
 
   Future<void> pickProfileImage() async {
+    if (isPickingImage.value) return;
+
     try {
+      isPickingImage.value = true;
+
       final pickedFile = await _picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 80, 
@@ -138,6 +139,8 @@ class ProfileController extends GetxController {
       }
     } catch (e) {
       log("Error picking image: $e");
+    } finally {
+      isPickingImage.value = false;
     }
   }
 
